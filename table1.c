@@ -600,7 +600,7 @@ void AK_print_table(char *tblName) {
                     if (temp->block->last_tuple_dict_id == 0)
                         break;
                     for (k = 0; k < DATA_BLOCK_SIZE; k += num_attr) {
-                        if (temp->block->tuple_dict[k].size > 0 /*&& k / num_attr < num_rows*/) {
+                        if (temp->block->tuple_dict[k].size > 0) {
                             for (l = 0; l < num_attr; l++) {
                                 type = temp->block->tuple_dict[k + l].type;
                                 size = temp->block->tuple_dict[k + l].size;
@@ -729,7 +729,7 @@ void AK_print_row_to_file(int col_len[], struct list_node * row) {
 
 /**
  * @author Dino Laktašić and Mislav Čakarić (replaced old print table function by new one)
- * update by Luka Rajcevic
+ * update by Luka Rajcevic and Anto Tomaš
  * @brief  Function for printing table
  * @param *tblName table name
  * @return No return value
@@ -841,7 +841,7 @@ void AK_print_table_to_file(char *tblName) {
                             }
                             AK_print_row_to_file(len, row_root);
                             AK_print_row_spacer_to_file(len, length);
-                            Ak_DeleteAll_L3(row_root);
+                            Ak_DeleteAll_L3(&row_root);
                         }
                     }
                 }
@@ -1009,17 +1009,10 @@ int AK_rename(char *old_table_name, char *old_attr, char *new_table_name, char *
     return EXIT_SUCCESS;
 }
 
-
-
-
-
-
 /**
  * @author Unknown
  * @brief Function for testing table abstraction
  * @return No return value
-
-    @update by Ana-Marija Balen - added getRow function to the test
  */
 void AK_table_test() {
     AK_PRO;
@@ -1046,18 +1039,7 @@ void AK_table_test() {
     printf("%d\n", AK_get_num_records("student"));
     printf("\n");
 
-    printf("Table \"student\": AK_get_row: ");
-    
-    int i;
-
-    AK_header *head = AK_get_header("student");
-    int num_attr = AK_num_attr("student");
-    int len[num_attr];
-    for (i = 0; i < num_attr; i++) {
-            len[i] = strlen((head + i)->att_name);
-    }
-
-    AK_print_row(len, AK_get_row(0,"student"));
+    printf("Table \"student\": AK_get_row: First row: \n");
     printf("\n");
 
     printf("Table \"student\": AK_get_attr_name for index 3: ");
